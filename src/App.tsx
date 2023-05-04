@@ -9,13 +9,13 @@ type pathType = {
 
 export const App = () => {
   //パスの設定
-  const [Path, setPath] = useState<pathType>({ winPath: '', macPath: '', initialPath: '' });
+  const [path, setPath] = useState<pathType>({ winPath: '', macPath: '', initialPath: '' });
 
   //初期入力のパス保存
 
   //inputフォーム入力
-  const setCrossPath = (inputPath: string, osCheck: number) => {
-    if (osCheck) {
+  const setCrossPath = (inputPath: string, isMac: boolean) => {
+    if (isMac) {
       //macのpath変換用処理を記載する
       setPath({ macPath: inputPath });
     } else {
@@ -27,14 +27,13 @@ export const App = () => {
   //Pathの変換処理
   const conversionPath = () => {
     let generationPath: string = '';
-    if (Path.winPath) {
-      generationPath = Path.winPath.replace(/\\/g, '/');
+    if (path.winPath) {
+      generationPath = path.winPath.replace(/\\/g, '/');
       generationPath = generationPath.replace(/192.168.254.6/g, 'Volumes');
-    } else if (Path.macPath) {
-      generationPath = Path.macPath.replace(/\//g, '\\');
+    } else if (path.macPath) {
+      generationPath = path.macPath.replace(/\//g, '\\');
       generationPath = `\\${generationPath.replace(/Volumes/g, '192.168.254.6')}`;
     }
-    console.log(generationPath);
     setPath({ initialPath: generationPath });
   };
 
@@ -48,42 +47,58 @@ export const App = () => {
       }}
     >
       <h1>パス変換</h1>
-      <div className="d-flex flex-row">
-        <div className="form-group my-box w-25">
+      <div className="d-flex flex-row justify-content-around">
+        <div
+          className="form-group my-box w-40"
+          style={{
+            height: '50%',
+            margin: '0 auto',
+            maxWidth: 300,
+            width: '100%',
+          }}
+        >
           <label>windows Path:</label>
           <textarea
             id="textarea"
-            className="form-control"
-            value={Path.winPath ? Path.winPath : Path.initialPath}
+            className="form-control textarea"
+            value={path.winPath ? path.winPath : path.initialPath}
             onChange={(event) => {
-              setCrossPath(event.target.value, 0);
+              setCrossPath(event.target.value, false);
             }}
           ></textarea>
         </div>
 
-        <div className="form-group my-box w-25">
+        <div
+          className="form-group my-box w-40"
+          style={{
+            height: '50%',
+            margin: '0 auto',
+            maxWidth: 300,
+            width: '100%',
+          }}
+        >
           <label>mac Path:</label>
           <textarea
             id="textarea"
-            className="form-control"
-            value={Path.macPath ? Path.macPath : Path.initialPath}
+            className="form-control textarea"
+            value={path.macPath ? path.macPath : path.initialPath}
             onChange={(event) => {
-              setCrossPath(event.target.value, 1);
+              setCrossPath(event.target.value, true);
             }}
           ></textarea>
         </div>
-        <div className="button-container">
-          <button
-            className="btn btn-primary ms-3"
-            onClick={() => conversionPath()}
-            style={{
-              height: 'auto',
-              maxWidth: 200,
-            }}
-          >
-            変換
-          </button>
-        </div>
+      </div>
+      <div className="button-container">
+        <button
+          className="btn btn-primary ms-3"
+          onClick={() => conversionPath()}
+          style={{
+            height: 'auto',
+            maxWidth: 200,
+          }}
+        >
+          変換
+        </button>
       </div>
     </div>
   );
