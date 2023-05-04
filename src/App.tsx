@@ -1,14 +1,10 @@
 import React, { useState, useCallback } from 'react';
 import './App.css';
-import path from 'path';
 
 type pathType = {
   winPath?: string;
   macPath?: string;
   initialPath?: string;
-};
-type Linktype = {
-  url: string;
 };
 
 export const App = () => {
