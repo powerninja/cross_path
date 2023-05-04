@@ -33,8 +33,10 @@ export const App = () => {
     let generationPath: string = '';
     if (Path.winPath) {
       generationPath = Path.winPath.replace(/\\/g, '/');
+      generationPath = generationPath.replace(/192.168.254.6/g, 'Volumes');
     } else if (Path.macPath) {
-      generationPath = Path.macPath.replace('//', '\\');
+      generationPath = Path.macPath.replace(/\//g, '\\');
+      generationPath = `\\${generationPath.replace(/Volumes/g, '192.168.254.6')}`;
     }
     console.log(generationPath);
   };
