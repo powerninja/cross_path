@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import './App.css';
 
-type pathType = {
+type PathState = {
   winPath?: string;
   macPath?: string;
   initialPath?: string;
@@ -9,7 +9,7 @@ type pathType = {
 
 export const App = () => {
   //パスの設定
-  const [path, setPath] = useState<pathType>({ winPath: '', macPath: '', initialPath: '' });
+  const [path, setPath] = useState<PathState>({ winPath: '', macPath: '', initialPath: '' });
 
   //初期入力のパス保存
 
@@ -17,24 +17,33 @@ export const App = () => {
   const setCrossPath = (inputPath: string, isMac: boolean) => {
     if (isMac) {
       //macのpath変換用処理を記載する
-      setPath({ macPath: inputPath });
+      // setPath({ macPath: inputPath });
+      setPath((prevState) => ({ ...prevState, macPath: inputPath }));
     } else {
       //windowsのpath変換用処理を記載する
-      setPath({ winPath: inputPath });
+      // setPath({ winPath: inputPath });
+      setPath((prevState) => ({ ...prevState, winPath: inputPath }));
     }
   };
 
   //Pathの変換処理
   const conversionPath = () => {
-    let generationPath: string = '';
+    // let generationPath: string = '';
     if (path.winPath) {
-      generationPath = path.winPath.replace(/\\/g, '/');
-      generationPath = generationPath.replace(/192.168.254.6/g, 'Volumes');
+      // generationPath = path.winPath.replace(/\\/g, '/');
+      // generationPath = generationPath.replace(/192.168.254.6/g, 'Volumes');
+      const macPath = path.winPath
+        .replace(/\\/g, '/')
+        .replace(/192.168.254.6/g, 'Volumes')
+        .slice(1);
+      setPath((prevState) => ({ ...prevState, macPath }));
     } else if (path.macPath) {
-      generationPath = path.macPath.replace(/\//g, '\\');
-      generationPath = `\\${generationPath.replace(/Volumes/g, '192.168.254.6')}`;
+      // generationPath = path.macPath.replace(/\//g, '\\');
+      // generationPath = `\\${generationPath.replace(/Volumes/g, '192.168.254.6')}`;
+      const winPath = `\\${path.macPath.replace(/\//g, '\\').replace(/Volumes/g, '192.168.254.6')}`;
+      setPath((prevState) => ({ ...prevState, winPath }));
     }
-    setPath({ initialPath: generationPath });
+    // setPath({ initialPath: generationPath });
   };
 
   return (
@@ -59,7 +68,6 @@ export const App = () => {
         >
           <label>windows Path:</label>
           <textarea
-            id="textarea"
             className="form-control textarea"
             value={path.winPath ? path.winPath : path.initialPath}
             onChange={(event) => {
@@ -79,7 +87,6 @@ export const App = () => {
         >
           <label>mac Path:</label>
           <textarea
-            id="textarea"
             className="form-control textarea"
             value={path.macPath ? path.macPath : path.initialPath}
             onChange={(event) => {
