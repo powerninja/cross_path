@@ -39,6 +39,7 @@ export const App = () => {
       generationPath = `\\${generationPath.replace(/Volumes/g, '192.168.254.6')}`;
     }
     console.log(generationPath);
+    setPath({ initialPath: generationPath });
   };
 
   return (
@@ -57,7 +58,7 @@ export const App = () => {
           <textarea
             id="textarea"
             className="form-control"
-            value={Path.winPath}
+            value={Path.winPath ? Path.winPath : Path.initialPath}
             onChange={(event) => {
               setCrossPath(event.target.value, 0);
             }}
@@ -69,7 +70,7 @@ export const App = () => {
           <textarea
             id="textarea"
             className="form-control"
-            value={Path.macPath}
+            value={Path.macPath ? Path.macPath : Path.initialPath}
             onChange={(event) => {
               setCrossPath(event.target.value, 1);
             }}
