@@ -1,5 +1,6 @@
 # windows のパスと mac のパスを変換
 
+windows のパスと mac のパスを変換するアプリケーションです
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
