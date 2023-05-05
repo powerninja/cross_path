@@ -1,3 +1,4 @@
+@import url('https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css');
 .App {
   text-align: center;
 }
@@ -35,4 +36,21 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.textarea {
+  resize: both; /* ユーザーがテキストエリアのサイズを変更できるようにする */
+  min-height: 100px; /* テキストエリアの最小高さを設定 */
+  width: 100%; /* テキストエリアの幅を100%にする */
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
