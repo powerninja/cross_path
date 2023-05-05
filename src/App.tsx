@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import { useState } from 'react';
 import './App.css';
 
 type PathState = {
@@ -17,33 +17,29 @@ export const App = () => {
   const setCrossPath = (inputPath: string, isMac: boolean) => {
     if (isMac) {
       //macのpath変換用処理を記載する
-      // setPath({ macPath: inputPath });
       setPath((prevState) => ({ ...prevState, macPath: inputPath }));
     } else {
       //windowsのpath変換用処理を記載する
-      // setPath({ winPath: inputPath });
       setPath((prevState) => ({ ...prevState, winPath: inputPath }));
     }
   };
 
-  //Pathの変換処理
+  //変換ボタン押下時に、Pathの変換処理を実行する
   const conversionPath = () => {
-    // let generationPath: string = '';
     if (path.winPath) {
-      // generationPath = path.winPath.replace(/\\/g, '/');
-      // generationPath = generationPath.replace(/192.168.254.6/g, 'Volumes');
+      //windowsのpathを変換
       const macPath = path.winPath
         .replace(/\\/g, '/')
         .replace(/192.168.254.6/g, 'Volumes')
         .slice(1);
       setPath((prevState) => ({ ...prevState, macPath }));
     } else if (path.macPath) {
-      // generationPath = path.macPath.replace(/\//g, '\\');
-      // generationPath = `\\${generationPath.replace(/Volumes/g, '192.168.254.6')}`;
+      //macのpathを変換
       const winPath = `\\${path.macPath.replace(/\//g, '\\').replace(/Volumes/g, '192.168.254.6')}`;
       setPath((prevState) => ({ ...prevState, winPath }));
+    } else {
+      alert('パスを入力してください');
     }
-    // setPath({ initialPath: generationPath });
   };
 
   //クリアボタン押下時に、テキストエリアと変換された値をクリアする
