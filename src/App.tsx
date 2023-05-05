@@ -8,10 +8,10 @@ type PathState = {
 };
 
 export const App = () => {
+  //パスの初期値を設定
+  const initialPathState = { winPath: '', macPath: '', initialPath: '' };
   //パスの設定
-  const [path, setPath] = useState<PathState>({ winPath: '', macPath: '', initialPath: '' });
-
-  //初期入力のパス保存
+  const [path, setPath] = useState<PathState>(initialPathState);
 
   //inputフォーム入力
   const setCrossPath = (inputPath: string, isMac: boolean) => {
@@ -46,6 +46,12 @@ export const App = () => {
     // setPath({ initialPath: generationPath });
   };
 
+  //クリアボタン押下時に、テキストエリアと変換された値をクリアする
+  const clearPath = () => {
+    //パスの初期化
+    setPath(initialPathState);
+  };
+
   return (
     <div
       style={{
@@ -55,7 +61,7 @@ export const App = () => {
         width: '100%',
       }}
     >
-      <h1>パス変換</h1>
+      <h1>ファイルパス変換</h1>
       <div className="d-flex flex-row justify-content-around">
         <div
           className="form-group my-box w-40"
@@ -105,6 +111,16 @@ export const App = () => {
           }}
         >
           変換
+        </button>
+        <button
+          className="btn btn-danger ms-3"
+          onClick={() => clearPath()}
+          style={{
+            height: 'auto',
+            maxWidth: 200,
+          }}
+        >
+          クリア
         </button>
       </div>
     </div>
