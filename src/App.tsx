@@ -35,7 +35,10 @@ export const App = () => {
       setPath((prevState) => ({ ...prevState, macPath }));
     } else if (path.macPath) {
       //macのpathを変換
-      const winPath = `\\${path.macPath.replace(/\//g, '\\').replace(/Volumes/g, '192.168.254.6')}`;
+      const winPath = `\\${path.macPath
+        .replace(/\//g, '\\')
+        .replace(/Volumes/g, '192.168.254.6')
+        .replace(/\\/g, '')}`;
       setPath((prevState) => ({ ...prevState, winPath }));
     } else {
       alert('パスを入力してください');
@@ -58,6 +61,8 @@ export const App = () => {
       }}
     >
       <h1>ファイルパス変換</h1>
+      <h3>パスの確認方法</h3>
+      <img src="checkmacPath.gif" alt="gif"></img>
       <div className="d-flex flex-row justify-content-around">
         <div
           className="form-group my-box w-40"
