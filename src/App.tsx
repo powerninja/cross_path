@@ -53,7 +53,7 @@ export const App = () => {
       style={{
         height: 'auto',
         margin: '0 auto',
-        maxWidth: 800,
+        maxWidth: 1000,
         width: '100%',
       }}
     >
@@ -75,6 +75,7 @@ export const App = () => {
             onChange={(event) => {
               setCrossPath(event.target.value, false);
             }}
+            placeholder="変換を行いたいwindowsのパスを入力してください"
           ></textarea>
         </div>
 
@@ -94,6 +95,7 @@ export const App = () => {
             onChange={(event) => {
               setCrossPath(event.target.value, true);
             }}
+            placeholder="変換を行いたいmacのパスを入力してください"
           ></textarea>
         </div>
       </div>
