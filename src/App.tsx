@@ -70,7 +70,7 @@ export const App = () => {
         >
           <label>windows Path:</label>
           <textarea
-            className="form-control textarea"
+            className="textarea"
             value={path.winPath ? path.winPath : path.initialPath}
             onChange={(event) => {
               setCrossPath(event.target.value, false);
@@ -89,7 +89,7 @@ export const App = () => {
         >
           <label>mac Path:</label>
           <textarea
-            className="form-control textarea"
+            className="textarea"
             value={path.macPath ? path.macPath : path.initialPath}
             onChange={(event) => {
               setCrossPath(event.target.value, true);

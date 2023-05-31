@@ -47,6 +47,8 @@
   resize: both; /* ユーザーがテキストエリアのサイズを変更できるようにする */
   min-height: 100px; /* テキストエリアの最小高さを設定 */
   width: 100%; /* テキストエリアの幅を100%にする */
+  min-height: 200px;
+  min-width: 300px;
 }
 
 .button-container {
