@@ -34,8 +34,12 @@ export const App = () => {
         .slice(1);
       setPath((prevState) => ({ ...prevState, macPath }));
     } else if (path.macPath) {
+      //パスの変換前に不要なバックスラッシュを削除する
+      const replaceBackSlash = path.macPath.replace(/\\/g, '');
       //macのpathを変換
-      const winPath = `\\${path.macPath.replace(/\//g, '\\').replace(/Volumes/g, '192.168.254.6')}`;
+      const normalizWinPath = `\\${replaceBackSlash.replace(/\//g, '\\').replace(/Volumes/g, '192.168.254.6')}`;
+      //文字コードをUTF8-mac(NFD)からUTF8(NFC)に変換する
+      const winPath = normalizWinPath.normalize('NFC');
       setPath((prevState) => ({ ...prevState, winPath }));
     } else {
       alert('パスを入力してください');
