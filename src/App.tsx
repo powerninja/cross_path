@@ -57,69 +57,41 @@ export const App = () => {
       style={{
         height: 'auto',
         margin: '0 auto',
-        maxWidth: 800,
+        maxWidth: 1000,
         width: '100%',
       }}
     >
       <h1>ファイルパス変換</h1>
       <div className="d-flex flex-row justify-content-around">
-        <div
-          className="form-group my-box w-40"
-          style={{
-            height: '50%',
-            margin: '0 auto',
-            maxWidth: 300,
-            width: '100%',
-          }}
-        >
+        <div className="form-group my-box w-40">
           <label>windows Path:</label>
           <textarea
-            className="form-control textarea"
+            className="textarea"
             value={path.winPath ? path.winPath : path.initialPath}
             onChange={(event) => {
               setCrossPath(event.target.value, false);
             }}
+            placeholder="変換を行いたいwindowsのパスを入力してください"
           ></textarea>
         </div>
 
-        <div
-          className="form-group my-box w-40"
-          style={{
-            height: '50%',
-            margin: '0 auto',
-            maxWidth: 300,
-            width: '100%',
-          }}
-        >
+        <div className="form-group my-box w-40">
           <label>mac Path:</label>
           <textarea
-            className="form-control textarea"
+            className="textarea"
             value={path.macPath ? path.macPath : path.initialPath}
             onChange={(event) => {
               setCrossPath(event.target.value, true);
             }}
+            placeholder="変換を行いたいmacのパスを入力してください"
           ></textarea>
         </div>
       </div>
       <div className="button-container">
-        <button
-          className="btn btn-primary ms-3"
-          onClick={() => conversionPath()}
-          style={{
-            height: 'auto',
-            maxWidth: 200,
-          }}
-        >
+        <button className="btn btn-primary ms-3" onClick={() => conversionPath()}>
           変換
         </button>
-        <button
-          className="btn btn-danger ms-3"
-          onClick={() => clearPath()}
-          style={{
-            height: 'auto',
-            maxWidth: 200,
-          }}
-        >
+        <button className="btn btn-danger ms-3" onClick={() => clearPath()}>
           クリア
         </button>
       </div>

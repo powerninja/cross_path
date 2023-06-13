@@ -3,50 +3,21 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 .form-group {
   display: flex;
   flex-direction: column;
+  height: 50%;
+  margin: 0 auto;
+  max-width: 300px;
+  width: 100%;
 }
 
 .textarea {
   resize: both; /* ユーザーがテキストエリアのサイズを変更できるようにする */
   min-height: 100px; /* テキストエリアの最小高さを設定 */
   width: 100%; /* テキストエリアの幅を100%にする */
+  min-height: 200px;
+  min-width: 400px;
 }
 
 .button-container {
