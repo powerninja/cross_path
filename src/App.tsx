@@ -15,7 +15,7 @@ export const App = () => {
   const [convertWinPath, setConvertWinPath] = useState('');
   const [convertMacPath, setConvertMacPath] = useState('');
 
-  //
+  //text ariaに値が入力された際はtrueとするフラグ
   const [checkConvertWinPath, setCheckConvertWinPath] = useState(false);
   const [checkConvertMacPath, setCheckConvertMacPath] = useState(false);
 
@@ -53,12 +53,12 @@ export const App = () => {
     }
   }, [macPath]);
 
-  // pathが更新された時にconversionPathを呼び出し、パスの変換を行う
+  // pathが更新された時にconversionWinPathを呼び出し、パスの変換を行う
   useEffect(() => {
     conversionWinPath();
   }, [winPath, conversionMacPath]);
 
-  // pathが更新された時にconversionPathを呼び出し、パスの変換を行う
+  // pathが更新された時にconversionMacPathを呼び出し、パスの変換を行う
   useEffect(() => {
     conversionMacPath();
   }, [macPath, conversionWinPath]);
