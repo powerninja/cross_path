@@ -7,58 +7,81 @@ type PathState = {
 };
 
 export const App = () => {
-  //パスの初期値を設定
-  const initialPathState = { winPath: '', macPath: '' };
   //パスの設定
-  const [path, setPath] = useState<PathState>({ winPath: '', macPath: '' });
-  //変換後のパスを保存
-  const [convertPath, setConvertPath] = useState<PathState>({ winPath: '', macPath: '' });
+  const [winPath, setWinPath] = useState('');
+  const [macPath, setMacPath] = useState('');
 
-  //inputフォーム入力
-  const setCrossPath = (inputPath: string, isMac: boolean) => {
-    if (isMac) {
-      //macのpath変換用処理を記載する
-      setPath((prevState) => ({ ...prevState, macPath: inputPath }));
-    } else {
-      //windowsのpath変換用処理を記載する
-      setPath((prevState) => ({ ...prevState, winPath: inputPath }));
-    }
+  //変換後のパスを保存
+  const [convertWinPath, setConvertWinPath] = useState('');
+  const [convertMacPath, setConvertMacPath] = useState('');
+
+  //
+  const [checkConvertWinPath, setCheckConvertWinPath] = useState(false);
+  const [checkConvertMacPath, setCheckConvertMacPath] = useState(false);
+
+  // windows inputフォーム入力
+  const setWinPathInput = (inputPath: string) => {
+    setWinPath(inputPath);
+    setCheckConvertWinPath(true);
+  };
+
+  // mac inputフォーム入力
+  const setMacPathInput = (inputPath: string) => {
+    setMacPath(inputPath);
+    setCheckConvertMacPath(true);
   };
 
   //変換ボタン押下時に、Pathの変換処理を実行する
-  const conversionPath = useCallback(() => {
-    if (path.winPath) {
-      //windowsのpathを変換
-      const macPath = path.winPath
-        .replace(/\\/g, '/')
-        .replace(/192.168.254.6/g, 'Volumes')
-        .slice(1);
-      setConvertPath((prevState) => ({ ...prevState, macPath }));
-    } else if (path.macPath) {
-      //パスの変換前に不要なバックスラッシュを削除する
-      const replaceBackSlash = path.macPath.replace(/\\/g, '');
-      //macのpathを変換
-      const normalizWinPath = `\\${replaceBackSlash.replace(/\//g, '\\').replace(/Volumes/g, '192.168.254.6')}`;
-      //文字コードをUTF8-mac(NFD)からUTF8(NFC)に変換する
-      const winPath = normalizWinPath.normalize('NFC');
-      setConvertPath((prevState) => ({ ...prevState, winPath }));
-    } else {
-      alert('パスを入力してください');
-    }
-  }, [path]);
+  const conversionWinPath = useCallback(() => {
+    //windowsのpathを変換
+    const macPaths = winPath
+      .replace(/\\/g, '/')
+      .replace(/192.168.254.6/g, 'Volumes')
+      .slice(1);
+    setConvertMacPath(macPaths);
+  }, [winPath]);
 
-  // pathが更新された時にconsole.logで値を表示
+  const conversionMacPath = useCallback(() => {
+    // console.log('macパス変換の中');
+    //パスの変換前に不要なバックスラッシュを削除する
+    const replaceBackSlash = macPath.replace(/\\/g, '');
+    //macのpathを変換
+    const normalizWinPath = `\\${replaceBackSlash.replace(/\//g, '\\').replace(/Volumes/g, '192.168.254.6')}`;
+    //文字コードをUTF8-mac(NFD)からUTF8(NFC)に変換する
+    const winPaths = normalizWinPath.normalize('NFC');
+    setConvertWinPath(winPaths);
+  }, [macPath]);
+
+  // pathが更新された時にconversionPathを呼び出し、パスの変換を行う
   useEffect(() => {
-    if (path.macPath || path.winPath) {
-      conversionPath();
+    conversionWinPath();
+  }, [winPath, conversionMacPath]);
+
+  // pathが更新された時にconversionPathを呼び出し、パスの変換を行う
+  useEffect(() => {
+    conversionMacPath();
+  }, [macPath, conversionWinPath]);
+
+  // convertWinPath or convertMacPathが更新された時にフラグをクリアする
+  useEffect(() => {
+    if (convertWinPath) {
+      setCheckConvertWinPath(false);
     }
-  }, [path, conversionPath]);
+  }, [convertWinPath]);
+
+  useEffect(() => {
+    if (convertMacPath) {
+      setCheckConvertMacPath(false);
+    }
+  }, [convertMacPath]);
 
   //クリアボタン押下時に、テキストエリアと変換された値をクリアする
   const clearPath = () => {
     //パスの初期化
-    setPath(initialPathState);
-    setConvertPath(initialPathState);
+    setWinPath('');
+    setMacPath('');
+    setConvertWinPath('');
+    setConvertMacPath('');
   };
 
   return (
@@ -76,9 +99,10 @@ export const App = () => {
           <label>windows Path:</label>
           <textarea
             className="textarea"
-            value={convertPath.winPath ? convertPath.winPath : path.winPath}
+            // value={checkConvertWinPath ? winPath : convertWinPath}
+            value={checkConvertWinPath ? winPath : convertWinPath}
             onChange={(event) => {
-              setCrossPath(event.target.value, false);
+              setWinPathInput(event.target.value);
             }}
             placeholder="変換を行いたいwindowsのパスを入力してください"
           ></textarea>
@@ -88,9 +112,10 @@ export const App = () => {
           <label>mac Path:</label>
           <textarea
             className="textarea"
-            value={convertPath.macPath ? convertPath.macPath : path.macPath}
+            // value={convertMacPath || macPath}
+            value={checkConvertMacPath ? macPath : convertMacPath}
             onChange={(event) => {
-              setCrossPath(event.target.value, true);
+              setMacPathInput(event.target.value);
             }}
             placeholder="変換を行いたいmacのパスを入力してください"
           ></textarea>
