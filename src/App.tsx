@@ -1,18 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import './App.css';
-import { debounce } from 'lodash';
 
 type PathState = {
   winPath?: string;
   macPath?: string;
-  initialPath?: string;
 };
 
 export const App = () => {
   //パスの初期値を設定
-  const initialPathState = { winPath: '', macPath: '', initialPath: '' };
+  const initialPathState = { winPath: '', macPath: '' };
   //パスの設定
-  const [path, setPath] = useState<PathState>(initialPathState);
+  const [path, setPath] = useState<PathState>({ winPath: '', macPath: '' });
+  //変換後のパスを保存
+  const [convertPath, setConvertPath] = useState<PathState>({ winPath: '', macPath: '' });
 
   //inputフォーム入力
   const setCrossPath = (inputPath: string, isMac: boolean) => {
@@ -26,14 +26,14 @@ export const App = () => {
   };
 
   //変換ボタン押下時に、Pathの変換処理を実行する
-  const conversionPath = () => {
+  const conversionPath = useCallback(() => {
     if (path.winPath) {
       //windowsのpathを変換
       const macPath = path.winPath
         .replace(/\\/g, '/')
         .replace(/192.168.254.6/g, 'Volumes')
         .slice(1);
-      setPath((prevState) => ({ ...prevState, macPath }));
+      setConvertPath((prevState) => ({ ...prevState, macPath }));
     } else if (path.macPath) {
       //パスの変換前に不要なバックスラッシュを削除する
       const replaceBackSlash = path.macPath.replace(/\\/g, '');
@@ -41,16 +41,24 @@ export const App = () => {
       const normalizWinPath = `\\${replaceBackSlash.replace(/\//g, '\\').replace(/Volumes/g, '192.168.254.6')}`;
       //文字コードをUTF8-mac(NFD)からUTF8(NFC)に変換する
       const winPath = normalizWinPath.normalize('NFC');
-      setPath((prevState) => ({ ...prevState, winPath }));
+      setConvertPath((prevState) => ({ ...prevState, winPath }));
     } else {
       alert('パスを入力してください');
     }
-  };
+  }, [path]);
+
+  // pathが更新された時にconsole.logで値を表示
+  useEffect(() => {
+    if (path.macPath || path.winPath) {
+      conversionPath();
+    }
+  }, [path, conversionPath]);
 
   //クリアボタン押下時に、テキストエリアと変換された値をクリアする
   const clearPath = () => {
     //パスの初期化
     setPath(initialPathState);
+    setConvertPath(initialPathState);
   };
 
   return (
@@ -68,7 +76,7 @@ export const App = () => {
           <label>windows Path:</label>
           <textarea
             className="textarea"
-            value={path.winPath ? path.winPath : path.initialPath}
+            value={convertPath.winPath ? convertPath.winPath : path.winPath}
             onChange={(event) => {
               setCrossPath(event.target.value, false);
             }}
@@ -80,7 +88,7 @@ export const App = () => {
           <label>mac Path:</label>
           <textarea
             className="textarea"
-            value={path.macPath ? path.macPath : path.initialPath}
+            value={convertPath.macPath ? convertPath.macPath : path.macPath}
             onChange={(event) => {
               setCrossPath(event.target.value, true);
             }}
@@ -89,9 +97,6 @@ export const App = () => {
         </div>
       </div>
       <div className="button-container">
-        <button className="btn btn-primary ms-3" onClick={() => conversionPath()}>
-          変換
-        </button>
         <button className="btn btn-danger ms-3" onClick={() => clearPath()}>
           クリア
         </button>
