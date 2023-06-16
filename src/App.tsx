@@ -42,14 +42,15 @@ export const App = () => {
   }, [winPath]);
 
   const conversionMacPath = useCallback(() => {
-    // console.log('macパス変換の中');
-    //パスの変換前に不要なバックスラッシュを削除する
-    const replaceBackSlash = macPath.replace(/\\/g, '');
-    //macのpathを変換
-    const normalizWinPath = `\\${replaceBackSlash.replace(/\//g, '\\').replace(/Volumes/g, '192.168.254.6')}`;
-    //文字コードをUTF8-mac(NFD)からUTF8(NFC)に変換する
-    const winPaths = normalizWinPath.normalize('NFC');
-    setConvertWinPath(winPaths);
+    if (macPath) {
+      //パスの変換前に不要なバックスラッシュを削除する
+      const replaceBackSlash = macPath.replace(/\\/g, '');
+      //macのpathを変換
+      const normalizWinPath = `\\${replaceBackSlash.replace(/\//g, '\\').replace(/Volumes/g, '192.168.254.6')}`;
+      //文字コードをUTF8-mac(NFD)からUTF8(NFC)に変換する
+      const winPaths = normalizWinPath.normalize('NFC');
+      setConvertWinPath(winPaths);
+    }
   }, [macPath]);
 
   // pathが更新された時にconversionPathを呼び出し、パスの変換を行う
