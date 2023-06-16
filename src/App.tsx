@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
+import { debounce } from 'lodash';
 
 type PathState = {
   winPath?: string;
