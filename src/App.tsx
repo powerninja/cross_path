@@ -23,25 +23,40 @@ export const App = () => {
   const setWinPathInput = (inputPath: string) => {
     setWinPath(inputPath);
     setCheckConvertWinPath(true);
+
+    // text ariaが空の場合はmacのパスも空とする
+    if (!inputPath) {
+      setMacPath('');
+    }
   };
 
   // mac inputフォーム入力
   const setMacPathInput = (inputPath: string) => {
     setMacPath(inputPath);
     setCheckConvertMacPath(true);
+
+    // text ariaが空の場合はwindowsのパスも空とする
+    if (!inputPath) {
+      setWinPath('');
+    }
   };
 
   //変換ボタン押下時に、Pathの変換処理を実行する
   const conversionWinPath = useCallback(() => {
     //windowsのpathを変換
-    const macPaths = winPath
-      .replace(/\\/g, '/')
-      .replace(/192.168.254.6/g, 'Volumes')
-      .slice(1);
-    setConvertMacPath(macPaths);
+    if (winPath) {
+      const macPaths = winPath
+        .replace(/\\/g, '/')
+        .replace(/192.168.254.6/g, 'Volumes')
+        .slice(1);
+      setConvertMacPath(macPaths);
+    } else {
+      setConvertMacPath('');
+    }
   }, [winPath]);
 
   const conversionMacPath = useCallback(() => {
+    //windowsのpathを変換
     if (macPath) {
       //パスの変換前に不要なバックスラッシュを削除する
       const replaceBackSlash = macPath.replace(/\\/g, '');
