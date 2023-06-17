@@ -1,23 +1,18 @@
 import { useState, useEffect, useCallback } from 'react';
 import './App.css';
 
-type PathState = {
-  winPath?: string;
-  macPath?: string;
-};
-
 export const App = () => {
   //パスの設定
-  const [winPath, setWinPath] = useState('');
-  const [macPath, setMacPath] = useState('');
+  const [winPath, setWinPath] = useState<string>('');
+  const [macPath, setMacPath] = useState<string>('');
 
   //変換後のパスを保存
-  const [convertWinPath, setConvertWinPath] = useState('');
-  const [convertMacPath, setConvertMacPath] = useState('');
+  const [convertWinPath, setConvertWinPath] = useState<string>('');
+  const [convertMacPath, setConvertMacPath] = useState<string>('');
 
   //text ariaに値が入力された際はtrueとするフラグ
-  const [checkConvertWinPath, setCheckConvertWinPath] = useState(false);
-  const [checkConvertMacPath, setCheckConvertMacPath] = useState(false);
+  const [checkConvertWinPath, setCheckConvertWinPath] = useState<boolean>(false);
+  const [checkConvertMacPath, setCheckConvertMacPath] = useState<boolean>(false);
 
   // windows inputフォーム入力
   const setWinPathInput = (inputPath: string) => {
