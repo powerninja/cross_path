@@ -68,12 +68,12 @@ export const App = () => {
   // pathが更新された時にconversionWinPathを呼び出し、パスの変換を行う
   useEffect(() => {
     conversionWinPath();
-  }, [winPath, conversionMacPath]);
+  }, [winPath]);
 
   // pathが更新された時にconversionMacPathを呼び出し、パスの変換を行う
   useEffect(() => {
     conversionMacPath();
-  }, [macPath, conversionWinPath]);
+  }, [macPath]);
 
   // convertWinPath or convertMacPathが更新された時にフラグをクリアする
   useEffect(() => {
@@ -112,7 +112,6 @@ export const App = () => {
           <label>windows Path:</label>
           <textarea
             className="textarea"
-            // value={checkConvertWinPath ? winPath : convertWinPath}
             value={checkConvertWinPath ? winPath : convertWinPath}
             onChange={(event) => {
               setWinPathInput(event.target.value);
@@ -125,7 +124,6 @@ export const App = () => {
           <label>mac Path:</label>
           <textarea
             className="textarea"
-            // value={convertMacPath || macPath}
             value={checkConvertMacPath ? macPath : convertMacPath}
             onChange={(event) => {
               setMacPathInput(event.target.value);
