@@ -68,12 +68,12 @@ export const App = () => {
   // pathが更新された時にconversionWinPathを呼び出し、パスの変換を行う
   useEffect(() => {
     conversionWinPath();
-  }, [winPath]);
+  }, [winPath, conversionWinPath]);
 
   // pathが更新された時にconversionMacPathを呼び出し、パスの変換を行う
   useEffect(() => {
     conversionMacPath();
-  }, [macPath]);
+  }, [macPath, conversionMacPath]);
 
   // convertWinPath or convertMacPathが更新された時にフラグをクリアする
   useEffect(() => {
