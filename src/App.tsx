@@ -50,6 +50,8 @@ export const App = () => {
       //文字コードをUTF8-mac(NFD)からUTF8(NFC)に変換する
       const winPaths = normalizWinPath.normalize('NFC');
       setConvertWinPath(winPaths);
+    } else {
+      setConvertWinPath('');
     }
   }, [macPath]);
 
