@@ -3,6 +3,7 @@ import './App.css';
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
 
 export const App = () => {
   //パスの設定
@@ -111,9 +112,15 @@ export const App = () => {
     >
       <h1>ファイルパス変換</h1>
       <div className="d-flex flex-row justify-content-around">
-        <div className="form-group my-box w-40">
+        <Box
+          component="form"
+          sx={{
+            '& .MuiTextField-root': { m: 1, width: '35ch' },
+          }}
+          noValidate
+          autoComplete="off"
+        >
           <TextField
-            className="textarea"
             id="outlined-multiline-static"
             label="Windows Path"
             multiline
@@ -124,11 +131,8 @@ export const App = () => {
               setWinPathInput(event.target.value);
             }}
           />
-        </div>
 
-        <div className="form-group my-box w-40">
           <TextField
-            className="textarea"
             id="outlined-multiline-static"
             label="Mac Path"
             multiline
@@ -139,12 +143,13 @@ export const App = () => {
               setMacPathInput(event.target.value);
             }}
           />
-        </div>
-      </div>
-      <div className="button-container">
-        <Button variant="outlined" startIcon={<DeleteIcon />} onClick={() => clearPath()}>
-          クリア
-        </Button>
+
+          <div className="button-container">
+            <Button variant="outlined" startIcon={<DeleteIcon />} onClick={() => clearPath()}>
+              クリア
+            </Button>
+          </div>
+        </Box>
       </div>
     </div>
   );
