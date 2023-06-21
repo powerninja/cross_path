@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import './App.css';
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
+import TextField from '@mui/material/TextField';
 
 export const App = () => {
   //パスの設定
@@ -111,27 +112,33 @@ export const App = () => {
       <h1>ファイルパス変換</h1>
       <div className="d-flex flex-row justify-content-around">
         <div className="form-group my-box w-40">
-          <label>windows Path:</label>
-          <textarea
+          <TextField
             className="textarea"
+            id="outlined-multiline-static"
+            label="Windows Path"
+            multiline
+            rows={8}
+            defaultValue="変換を行いたいwindowsのパスを入力してください"
             value={checkConvertWinPath ? winPath : convertWinPath}
             onChange={(event) => {
               setWinPathInput(event.target.value);
             }}
-            placeholder="変換を行いたいwindowsのパスを入力してください"
-          ></textarea>
+          />
         </div>
 
         <div className="form-group my-box w-40">
-          <label>mac Path:</label>
-          <textarea
+          <TextField
             className="textarea"
+            id="outlined-multiline-static"
+            label="Mac Path"
+            multiline
+            rows={8}
+            defaultValue="変換を行いたいmacのパスを入力してください"
             value={checkConvertMacPath ? macPath : convertMacPath}
             onChange={(event) => {
               setMacPathInput(event.target.value);
             }}
-            placeholder="変換を行いたいmacのパスを入力してください"
-          ></textarea>
+          />
         </div>
       </div>
       <div className="button-container">
