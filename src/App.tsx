@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import './App.css';
+import Button from '@mui/material/Button';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export const App = () => {
   //パスの設定
@@ -133,9 +135,9 @@ export const App = () => {
         </div>
       </div>
       <div className="button-container">
-        <button className="btn btn-danger ms-3" onClick={() => clearPath()}>
+        <Button variant="outlined" startIcon={<DeleteIcon />} onClick={() => clearPath()}>
           クリア
-        </button>
+        </Button>
       </div>
     </div>
   );
