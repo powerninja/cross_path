@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 
 export const App = () => {
   //パスの設定
@@ -110,7 +111,10 @@ export const App = () => {
         width: '100%',
       }}
     >
-      <h1>ファイルパス変換</h1>
+      <Typography variant="h4" gutterBottom>
+        ファイルパス変換
+      </Typography>
+      {/* <h1>ファイルパス変換</h1> */}
       <div className="d-flex flex-row justify-content-around">
         <Box
           component="form"
