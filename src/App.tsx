@@ -5,6 +5,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
 
 export const App = () => {
   //パスの設定
@@ -18,6 +21,12 @@ export const App = () => {
   //text ariaに値が入力された際はtrueとするフラグ
   const [checkConvertWinPath, setCheckConvertWinPath] = useState<boolean>(false);
   const [checkConvertMacPath, setCheckConvertMacPath] = useState<boolean>(false);
+
+  //コピーペースト機能で使用(Windows)
+  const [resultWinText, setResultWinText] = useState<string>('');
+
+  //コピーペースト機能で使用(Mac)
+  const [resultMacText, setResultMacText] = useState<string>('');
 
   // windows inputフォーム入力
   const setWinPathInput = (inputPath: string) => {
@@ -50,6 +59,7 @@ export const App = () => {
         .replace(/192.168.254.6/g, 'Volumes')
         .slice(1);
       setConvertMacPath(macPaths);
+      setResultMacText(macPaths);
     } else {
       setConvertMacPath('');
     }
@@ -65,6 +75,7 @@ export const App = () => {
       //文字コードをUTF8-mac(NFD)からUTF8(NFC)に変換する
       const winPaths = normalizWinPath.normalize('NFC');
       setConvertWinPath(winPaths);
+      setResultWinText(winPaths);
     } else {
       setConvertWinPath('');
     }
@@ -102,6 +113,16 @@ export const App = () => {
     setConvertMacPath('');
   };
 
+  //クリップボードにコピー関数(windows)
+  const copyToClipboardWin = async () => {
+    await global.navigator.clipboard.writeText(resultWinText);
+  };
+
+  //クリップボードにコピー関数(Mac)
+  const copyToClipboardMac = async () => {
+    await global.navigator.clipboard.writeText(resultMacText);
+  };
+
   return (
     <div
       style={{
@@ -135,6 +156,11 @@ export const App = () => {
               setWinPathInput(event.target.value);
             }}
           />
+          <Tooltip title="Copy to Clipboard" placement="top" arrow>
+            <IconButton color="primary" size="small" onClick={() => copyToClipboardWin()}>
+              <ContentCopyIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
 
           <TextField
             id="outlined-multiline-static"
@@ -147,6 +173,11 @@ export const App = () => {
               setMacPathInput(event.target.value);
             }}
           />
+          <Tooltip title="Copy to Clipboard" placement="top" arrow>
+            <IconButton color="primary" size="small" onClick={() => copyToClipboardMac()}>
+              <ContentCopyIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
 
           <div className="button-container">
             <Button variant="outlined" startIcon={<DeleteIcon />} onClick={() => clearPath()}>
