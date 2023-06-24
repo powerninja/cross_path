@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
+import InputAdornment from '@mui/material/InputAdornment';
 
 export const App = () => {
   //パスの設定
@@ -140,7 +141,7 @@ export const App = () => {
         <Box
           component="form"
           sx={{
-            '& .MuiTextField-root': { m: 1, width: '35ch' },
+            '& .MuiTextField-root': { m: 1, width: '40ch' },
           }}
           noValidate
           autoComplete="off"
@@ -155,12 +156,18 @@ export const App = () => {
             onChange={(event) => {
               setWinPathInput(event.target.value);
             }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Tooltip title="Copy to Clipboard" placement="top" arrow>
+                    <IconButton color="primary" size="small" onClick={() => copyToClipboardWin()}>
+                      <ContentCopyIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                </InputAdornment>
+              ),
+            }}
           />
-          <Tooltip title="Copy to Clipboard" placement="top" arrow>
-            <IconButton color="primary" size="small" onClick={() => copyToClipboardWin()}>
-              <ContentCopyIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
 
           <TextField
             id="outlined-multiline-static"
@@ -172,12 +179,18 @@ export const App = () => {
             onChange={(event) => {
               setMacPathInput(event.target.value);
             }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Tooltip title="Copy to Clipboard" placement="top" arrow>
+                    <IconButton color="primary" size="small" onClick={() => copyToClipboardMac()}>
+                      <ContentCopyIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                </InputAdornment>
+              ),
+            }}
           />
-          <Tooltip title="Copy to Clipboard" placement="top" arrow>
-            <IconButton color="primary" size="small" onClick={() => copyToClipboardMac()}>
-              <ContentCopyIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
 
           <div className="button-container">
             <Button variant="outlined" startIcon={<DeleteIcon />} onClick={() => clearPath()}>
