@@ -31,8 +31,11 @@ export const App = () => {
 
   // windows inputフォーム入力
   const setWinPathInput = (inputPath: string) => {
+    console.log(inputPath);
     setWinPath(inputPath);
-    setCheckConvertWinPath(true);
+    if (inputPath) {
+      setCheckConvertWinPath(true);
+    }
 
     // text ariaが空の場合はmacのパスも空とする
     if (!inputPath) {
@@ -43,7 +46,9 @@ export const App = () => {
   // mac inputフォーム入力
   const setMacPathInput = (inputPath: string) => {
     setMacPath(inputPath);
-    setCheckConvertMacPath(true);
+    if (inputPath) {
+      setCheckConvertMacPath(true);
+    }
 
     // text ariaが空の場合はwindowsのパスも空とする
     if (!inputPath) {
@@ -63,6 +68,7 @@ export const App = () => {
       setResultMacText(macPaths);
     } else {
       setConvertMacPath('');
+      setResultMacText('');
     }
   }, [winPath]);
 
@@ -79,6 +85,7 @@ export const App = () => {
       setResultWinText(winPaths);
     } else {
       setConvertWinPath('');
+      setResultWinText('');
     }
   }, [macPath]);
 
