@@ -31,7 +31,6 @@ export const App = () => {
 
   // windows inputフォーム入力
   const setWinPathInput = (inputPath: string) => {
-    console.log(inputPath);
     setWinPath(inputPath);
     if (inputPath) {
       setCheckConvertWinPath(true);
@@ -60,10 +59,14 @@ export const App = () => {
   const conversionWinPath = useCallback(() => {
     //windowsのpathを変換
     if (winPath) {
-      const macPaths = winPath
-        .replace(/\\/g, '/')
-        .replace(/192.168.254.6/g, 'Volumes')
-        .slice(1);
+      let macPaths = winPath.replace(/\\/g, '/').replace(/192.168.254.6/g, 'Volumes');
+      //windows側のtextに入力された文字が2文字以上だった場合、パスの変換前に不要なスラッシュを削除する
+      if (winPath.length !== 1) {
+        //winPathの先頭の文字がスラッシュだった場合、スラッシュを削除する
+        if (winPath[0] === '\\') {
+          macPaths = macPaths.slice(1); //先頭の文字を削除
+        }
+      }
       setConvertMacPath(macPaths);
       setResultMacText(macPaths);
     } else {
@@ -158,7 +161,6 @@ export const App = () => {
             label="Windows Path"
             multiline
             rows={8}
-            defaultValue="変換を行いたいwindowsのパスを入力してください"
             value={checkConvertWinPath ? winPath : convertWinPath}
             onChange={(event) => {
               setWinPathInput(event.target.value);
@@ -181,7 +183,6 @@ export const App = () => {
             label="Mac Path"
             multiline
             rows={8}
-            defaultValue="変換を行いたいmacのパスを入力してください"
             value={checkConvertMacPath ? macPath : convertMacPath}
             onChange={(event) => {
               setMacPathInput(event.target.value);
