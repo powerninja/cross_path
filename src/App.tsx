@@ -3,6 +3,12 @@ import './App.css';
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import InputAdornment from '@mui/material/InputAdornment';
 
 export const App = () => {
   //パスの設定
@@ -17,10 +23,18 @@ export const App = () => {
   const [checkConvertWinPath, setCheckConvertWinPath] = useState<boolean>(false);
   const [checkConvertMacPath, setCheckConvertMacPath] = useState<boolean>(false);
 
+  //コピーペースト機能で使用(Windows)
+  const [resultWinText, setResultWinText] = useState<string>('');
+
+  //コピーペースト機能で使用(Mac)
+  const [resultMacText, setResultMacText] = useState<string>('');
+
   // windows inputフォーム入力
   const setWinPathInput = (inputPath: string) => {
     setWinPath(inputPath);
-    setCheckConvertWinPath(true);
+    if (inputPath) {
+      setCheckConvertWinPath(true);
+    }
 
     // text ariaが空の場合はmacのパスも空とする
     if (!inputPath) {
@@ -31,7 +45,9 @@ export const App = () => {
   // mac inputフォーム入力
   const setMacPathInput = (inputPath: string) => {
     setMacPath(inputPath);
-    setCheckConvertMacPath(true);
+    if (inputPath) {
+      setCheckConvertMacPath(true);
+    }
 
     // text ariaが空の場合はwindowsのパスも空とする
     if (!inputPath) {
@@ -43,13 +59,19 @@ export const App = () => {
   const conversionWinPath = useCallback(() => {
     //windowsのpathを変換
     if (winPath) {
-      const macPaths = winPath
-        .replace(/\\/g, '/')
-        .replace(/192.168.254.6/g, 'Volumes')
-        .slice(1);
+      let macPaths = winPath.replace(/\\/g, '/').replace(/192.168.254.6/g, 'Volumes');
+      //windows側のtextに入力された文字が2文字以上だった場合、パスの変換前に不要なスラッシュを削除する
+      if (winPath.length !== 1) {
+        //winPathの先頭の文字がスラッシュだった場合、スラッシュを削除する
+        if (winPath[0] === '\\') {
+          macPaths = macPaths.slice(1); //先頭の文字を削除
+        }
+      }
       setConvertMacPath(macPaths);
+      setResultMacText(macPaths);
     } else {
       setConvertMacPath('');
+      setResultMacText('');
     }
   }, [winPath]);
 
@@ -63,8 +85,10 @@ export const App = () => {
       //文字コードをUTF8-mac(NFD)からUTF8(NFC)に変換する
       const winPaths = normalizWinPath.normalize('NFC');
       setConvertWinPath(winPaths);
+      setResultWinText(winPaths);
     } else {
       setConvertWinPath('');
+      setResultWinText('');
     }
   }, [macPath]);
 
@@ -100,6 +124,16 @@ export const App = () => {
     setConvertMacPath('');
   };
 
+  //クリップボードにコピー関数(windows)
+  const copyToClipboardWin = async () => {
+    await global.navigator.clipboard.writeText(resultWinText);
+  };
+
+  //クリップボードにコピー関数(Mac)
+  const copyToClipboardMac = async () => {
+    await global.navigator.clipboard.writeText(resultMacText);
+  };
+
   return (
     <div
       style={{
@@ -109,42 +143,69 @@ export const App = () => {
         width: '100%',
       }}
     >
-      <h1>ファイルパス変換</h1>
+      <Typography variant="h4" gutterBottom>
+        ファイルパス変換
+      </Typography>
+      {/* <h1>ファイルパス変換</h1> */}
       <div className="d-flex flex-row justify-content-around">
-        <div className="form-group my-box w-40">
+        <Box
+          component="form"
+          sx={{
+            '& .MuiTextField-root': { m: 1, width: '40ch' },
+          }}
+          noValidate
+          autoComplete="off"
+        >
           <TextField
-            className="textarea"
             id="outlined-multiline-static"
             label="Windows Path"
             multiline
             rows={8}
-            defaultValue="変換を行いたいwindowsのパスを入力してください"
             value={checkConvertWinPath ? winPath : convertWinPath}
             onChange={(event) => {
               setWinPathInput(event.target.value);
             }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Tooltip title="Copy to Clipboard" placement="top" arrow>
+                    <IconButton color="primary" size="small" onClick={() => copyToClipboardWin()}>
+                      <ContentCopyIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                </InputAdornment>
+              ),
+            }}
           />
-        </div>
 
-        <div className="form-group my-box w-40">
           <TextField
-            className="textarea"
             id="outlined-multiline-static"
             label="Mac Path"
             multiline
             rows={8}
-            defaultValue="変換を行いたいmacのパスを入力してください"
             value={checkConvertMacPath ? macPath : convertMacPath}
             onChange={(event) => {
               setMacPathInput(event.target.value);
             }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Tooltip title="Copy to Clipboard" placement="top" arrow>
+                    <IconButton color="primary" size="small" onClick={() => copyToClipboardMac()}>
+                      <ContentCopyIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                </InputAdornment>
+              ),
+            }}
           />
-        </div>
-      </div>
-      <div className="button-container">
-        <Button variant="outlined" startIcon={<DeleteIcon />} onClick={() => clearPath()}>
-          クリア
-        </Button>
+
+          <div className="button-container">
+            <Button variant="outlined" startIcon={<DeleteIcon />} onClick={() => clearPath()}>
+              クリア
+            </Button>
+          </div>
+        </Box>
       </div>
     </div>
   );
