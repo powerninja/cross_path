@@ -124,14 +124,9 @@ export const App = () => {
     setConvertMacPath('');
   };
 
-  //クリップボードにコピー関数(windows)
-  const copyToClipboardWin = async () => {
-    await global.navigator.clipboard.writeText(resultWinText);
-  };
-
-  //クリップボードにコピー関数(Mac)
-  const copyToClipboardMac = async () => {
-    await global.navigator.clipboard.writeText(resultMacText);
+  //クリップボードにコピー関数
+  const copyToClipboard = async (alteredText: string) => {
+    await global.navigator.clipboard.writeText(alteredText);
   };
 
   return (
@@ -169,7 +164,7 @@ export const App = () => {
               endAdornment: (
                 <InputAdornment position="end">
                   <Tooltip title="Copy to Clipboard" placement="top" arrow>
-                    <IconButton color="primary" size="small" onClick={() => copyToClipboardWin()}>
+                    <IconButton color="primary" size="small" onClick={() => copyToClipboard(resultWinText)}>
                       <ContentCopyIcon fontSize="small" />
                     </IconButton>
                   </Tooltip>
@@ -191,7 +186,7 @@ export const App = () => {
               endAdornment: (
                 <InputAdornment position="end">
                   <Tooltip title="Copy to Clipboard" placement="top" arrow>
-                    <IconButton color="primary" size="small" onClick={() => copyToClipboardMac()}>
+                    <IconButton color="primary" size="small" onClick={() => copyToClipboard(resultMacText)}>
                       <ContentCopyIcon fontSize="small" />
                     </IconButton>
                   </Tooltip>
