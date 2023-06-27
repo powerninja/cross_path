@@ -60,7 +60,7 @@ export const App = () => {
   };
 
   //変換ボタン押下時に、Pathの変換処理を実行する
-  const conversionWinPath = useCallback(() => {
+  const convertWindowsPathToMac = useCallback(() => {
     //windowsのpathを変換
     if (winPath) {
       let macPaths = winPath.replace(/\\/g, '/').replace(/192.168.254.6/g, 'Volumes');
@@ -79,7 +79,7 @@ export const App = () => {
     }
   }, [winPath]);
 
-  const conversionMacPath = useCallback(() => {
+  const convertMacPathToWindows = useCallback(() => {
     //windowsのpathを変換
     if (macPath) {
       //パスの変換前に不要なバックスラッシュを削除する
@@ -98,13 +98,13 @@ export const App = () => {
 
   // pathが更新された時にconversionWinPathを呼び出し、パスの変換を行う
   useEffect(() => {
-    conversionWinPath();
-  }, [winPath, conversionWinPath]);
+    convertWindowsPathToMac();
+  }, [winPath, convertWindowsPathToMac]);
 
   // pathが更新された時にconversionMacPathを呼び出し、パスの変換を行う
   useEffect(() => {
-    conversionMacPath();
-  }, [macPath, conversionMacPath]);
+    convertMacPathToWindows();
+  }, [macPath, convertMacPathToWindows]);
 
   // convertWinPath or convertMacPathが更新された時にフラグをクリアする
   useEffect(() => {
