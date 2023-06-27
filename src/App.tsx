@@ -30,16 +30,14 @@ export const App = () => {
     setConvertedMacPath,
     resultWinText,
     resultMacText,
-    convertWindowsPathToMac,
-    convertedMacPathToWindows,
   } = usePathConversion({ initialPath });
 
   //useCopyClipboard呼び出し
   const { checkCopyWinFlag, checkCopyMacFlag, copyToClipboard } = useCopyClipboard();
 
   //TextFieldに値が入力された際に、変換されたパスを表示するために使用
-  const [checkconvertedWinPath, setCheckconvertedWinPath] = useState<boolean>(false);
-  const [checkconvertedMacPath, setCheckconvertedMacPath] = useState<boolean>(false);
+  const [checkConvertedWinPath, setCheckConvertedWinPath] = useState<boolean>(false);
+  const [checkConvertedMacPath, setCheckConvertedMacPath] = useState<boolean>(false);
 
   // inputフォーム入力
   const setPathInput = (inputPath: string, isWindowsPath: boolean) => {
@@ -47,7 +45,7 @@ export const App = () => {
     if (isWindowsPath) {
       setWinPath(inputPath);
       if (inputPath) {
-        setCheckconvertedWinPath(true);
+        setCheckConvertedWinPath(true);
       }
       // text ariaが空の場合はmacのパスも空とする
       if (!inputPath) {
@@ -57,7 +55,7 @@ export const App = () => {
     } else {
       setMacPath(inputPath);
       if (inputPath) {
-        setCheckconvertedMacPath(true);
+        setCheckConvertedMacPath(true);
       }
       // text ariaが空の場合はwindowsのパスも空とする
       if (!inputPath) {
@@ -66,26 +64,16 @@ export const App = () => {
     }
   };
 
-  // pathが更新された時にconversionWinPathを呼び出し、パスの変換を行う
-  useEffect(() => {
-    convertWindowsPathToMac();
-  }, [winPath, convertWindowsPathToMac]);
-
-  // pathが更新された時にconversionMacPathを呼び出し、パスの変換を行う
-  useEffect(() => {
-    convertedMacPathToWindows();
-  }, [macPath, convertedMacPathToWindows]);
-
   // convertedWinPath or convertedMacPathが更新された時にフラグをクリアする
   useEffect(() => {
     if (convertedWinPath) {
-      setCheckconvertedWinPath(false);
+      setCheckConvertedWinPath(false);
     }
   }, [convertedWinPath]);
 
   useEffect(() => {
     if (convertedMacPath) {
-      setCheckconvertedMacPath(false);
+      setCheckConvertedMacPath(false);
     }
   }, [convertedMacPath]);
 
@@ -125,7 +113,7 @@ export const App = () => {
             label="Windows Path"
             multiline
             rows={8}
-            value={checkconvertedWinPath ? winPath : convertedWinPath}
+            value={checkConvertedWinPath ? winPath : convertedWinPath}
             onChange={(event) => {
               setPathInput(event.target.value, true);
             }}
@@ -147,7 +135,7 @@ export const App = () => {
             label="Mac Path"
             multiline
             rows={8}
-            value={checkconvertedMacPath ? macPath : convertedMacPath}
+            value={checkConvertedMacPath ? macPath : convertedMacPath}
             onChange={(event) => {
               setPathInput(event.target.value, false);
             }}

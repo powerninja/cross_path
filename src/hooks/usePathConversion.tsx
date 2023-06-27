@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 
 type Props = {
   initialPath: string;
@@ -19,8 +19,8 @@ export const usePathConversion = ({ initialPath }: Props) => {
   //コピーペースト機能で使用(Mac)
   const [resultMacText, setResultMacText] = useState<string>(initialPath);
 
-  //変換ボタン押下時に、Pathの変換処理を実行する
-  const convertWindowsPathToMac = useCallback(() => {
+  // pathが更新された時にconversionWinPathを呼び出し、パスの変換を行う
+  useEffect(() => {
     //windowsのpathを変換
     if (winPath) {
       let macPaths = winPath.replace(/\\/g, '/').replace(/192.168.254.6/g, 'Volumes');
@@ -37,10 +37,11 @@ export const usePathConversion = ({ initialPath }: Props) => {
       setConvertedMacPath(initialPath);
       setResultMacText(initialPath);
     }
-  }, [winPath]);
+  }, [winPath, setConvertedMacPath, setResultMacText, initialPath]);
 
-  const convertedMacPathToWindows = useCallback(() => {
-    //windowsのpathを変換
+  // pathが更新された時にconversionMacPathを呼び出し、パスの変換を行う
+  useEffect(() => {
+    //macのpathを変換
     if (macPath) {
       //パスの変換前に不要なバックスラッシュを削除する
       const replaceBackSlash = macPath.replace(/\\/g, '');
@@ -54,17 +55,7 @@ export const usePathConversion = ({ initialPath }: Props) => {
       setConvertedWinPath(initialPath);
       setResultWinText(initialPath);
     }
-  }, [macPath]);
-
-  // pathが更新された時にconversionWinPathを呼び出し、パスの変換を行う
-  useEffect(() => {
-    convertWindowsPathToMac();
-  }, [winPath, convertWindowsPathToMac]);
-
-  // pathが更新された時にconversionMacPathを呼び出し、パスの変換を行う
-  useEffect(() => {
-    convertedMacPathToWindows();
-  }, [macPath, convertedMacPathToWindows]);
+  }, [macPath, setConvertedWinPath, setResultWinText, initialPath]);
 
   return {
     winPath,
@@ -76,8 +67,8 @@ export const usePathConversion = ({ initialPath }: Props) => {
     convertedMacPath,
     setConvertedMacPath,
     resultWinText,
+    setResultWinText,
     resultMacText,
-    convertWindowsPathToMac,
-    convertedMacPathToWindows,
+    setResultMacText,
   };
 };
