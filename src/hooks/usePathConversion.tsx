@@ -10,8 +10,8 @@ export const usePathConversion = ({ initialPath }: Props) => {
   const [macPath, setMacPath] = useState<string>(initialPath);
 
   //変換後のパスを保存
-  const [convertWinPath, setConvertWinPath] = useState<string>(initialPath);
-  const [convertMacPath, setConvertMacPath] = useState<string>(initialPath);
+  const [convertedWinPath, setConvertedWinPath] = useState<string>(initialPath);
+  const [convertedMacPath, setConvertedMacPath] = useState<string>(initialPath);
 
   //コピーペースト機能で使用(Windows)
   const [resultWinText, setResultWinText] = useState<string>(initialPath);
@@ -31,15 +31,15 @@ export const usePathConversion = ({ initialPath }: Props) => {
           macPaths = macPaths.slice(1); //先頭の文字を削除
         }
       }
-      setConvertMacPath(macPaths);
+      setConvertedMacPath(macPaths);
       setResultMacText(macPaths);
     } else {
-      setConvertMacPath(initialPath);
+      setConvertedMacPath(initialPath);
       setResultMacText(initialPath);
     }
   }, [winPath]);
 
-  const convertMacPathToWindows = useCallback(() => {
+  const convertedMacPathToWindows = useCallback(() => {
     //windowsのpathを変換
     if (macPath) {
       //パスの変換前に不要なバックスラッシュを削除する
@@ -48,10 +48,10 @@ export const usePathConversion = ({ initialPath }: Props) => {
       const normalizWinPath = `\\${replaceBackSlash.replace(/\//g, '\\').replace(/Volumes/g, '192.168.254.6')}`;
       //文字コードをUTF8-mac(NFD)からUTF8(NFC)に変換する
       const winPaths = normalizWinPath.normalize('NFC');
-      setConvertWinPath(winPaths);
+      setConvertedWinPath(winPaths);
       setResultWinText(winPaths);
     } else {
-      setConvertWinPath(initialPath);
+      setConvertedWinPath(initialPath);
       setResultWinText(initialPath);
     }
   }, [macPath]);
@@ -63,21 +63,21 @@ export const usePathConversion = ({ initialPath }: Props) => {
 
   // pathが更新された時にconversionMacPathを呼び出し、パスの変換を行う
   useEffect(() => {
-    convertMacPathToWindows();
-  }, [macPath, convertMacPathToWindows]);
+    convertedMacPathToWindows();
+  }, [macPath, convertedMacPathToWindows]);
 
   return {
     winPath,
     macPath,
     setWinPath,
     setMacPath,
-    convertWinPath,
-    setConvertWinPath,
-    convertMacPath,
-    setConvertMacPath,
+    convertedWinPath,
+    setConvertedWinPath,
+    convertedMacPath,
+    setConvertedMacPath,
     resultWinText,
     resultMacText,
     convertWindowsPathToMac,
-    convertMacPathToWindows,
+    convertedMacPathToWindows,
   };
 };
