@@ -1,19 +1,23 @@
 import { useState, useEffect, useCallback } from 'react';
 
-export const usePathConversion = () => {
+type Props = {
+  initialPath: string;
+};
+
+export const usePathConversion = ({ initialPath }: Props) => {
   //パスの設定
-  const [winPath, setWinPath] = useState<string>('');
-  const [macPath, setMacPath] = useState<string>('');
+  const [winPath, setWinPath] = useState<string>(initialPath);
+  const [macPath, setMacPath] = useState<string>(initialPath);
 
   //変換後のパスを保存
-  const [convertWinPath, setConvertWinPath] = useState<string>('');
-  const [convertMacPath, setConvertMacPath] = useState<string>('');
+  const [convertWinPath, setConvertWinPath] = useState<string>(initialPath);
+  const [convertMacPath, setConvertMacPath] = useState<string>(initialPath);
 
   //コピーペースト機能で使用(Windows)
-  const [resultWinText, setResultWinText] = useState<string>('');
+  const [resultWinText, setResultWinText] = useState<string>(initialPath);
 
   //コピーペースト機能で使用(Mac)
-  const [resultMacText, setResultMacText] = useState<string>('');
+  const [resultMacText, setResultMacText] = useState<string>(initialPath);
 
   //変換ボタン押下時に、Pathの変換処理を実行する
   const convertWindowsPathToMac = useCallback(() => {
@@ -30,8 +34,8 @@ export const usePathConversion = () => {
       setConvertMacPath(macPaths);
       setResultMacText(macPaths);
     } else {
-      setConvertMacPath('');
-      setResultMacText('');
+      setConvertMacPath(initialPath);
+      setResultMacText(initialPath);
     }
   }, [winPath]);
 
@@ -47,8 +51,8 @@ export const usePathConversion = () => {
       setConvertWinPath(winPaths);
       setResultWinText(winPaths);
     } else {
-      setConvertWinPath('');
-      setResultWinText('');
+      setConvertWinPath(initialPath);
+      setResultWinText(initialPath);
     }
   }, [macPath]);
 

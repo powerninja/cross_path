@@ -15,6 +15,9 @@ import InputAdornment from '@mui/material/InputAdornment';
 import CheckIcon from '@mui/icons-material/Check';
 
 export const App = () => {
+  //TextFieldの初期値
+  const initialPath: string = '';
+
   //usePathConversion呼び出し
   const {
     winPath,
@@ -29,12 +32,12 @@ export const App = () => {
     resultMacText,
     convertWindowsPathToMac,
     convertMacPathToWindows,
-  } = usePathConversion();
+  } = usePathConversion({ initialPath });
 
   //useCopyClipboard呼び出し
   const { checkCopyWinFlag, checkCopyMacFlag, copyToClipboard } = useCopyClipboard();
 
-  //text ariaに値が入力された際はtrueとするフラグ
+  //TextFieldに値が入力された際に、変換されたパスを表示するために使用
   const [checkConvertWinPath, setCheckConvertWinPath] = useState<boolean>(false);
   const [checkConvertMacPath, setCheckConvertMacPath] = useState<boolean>(false);
 
@@ -48,7 +51,7 @@ export const App = () => {
       }
       // text ariaが空の場合はmacのパスも空とする
       if (!inputPath) {
-        setMacPath('');
+        setMacPath(initialPath);
       }
       //macのpathを変換
     } else {
@@ -58,7 +61,7 @@ export const App = () => {
       }
       // text ariaが空の場合はwindowsのパスも空とする
       if (!inputPath) {
-        setWinPath('');
+        setWinPath(initialPath);
       }
     }
   };
@@ -89,10 +92,10 @@ export const App = () => {
   //クリアボタン押下時に、テキストエリアと変換された値をクリアする
   const clearPath = () => {
     //パスの初期化
-    setWinPath('');
-    setMacPath('');
-    setConvertWinPath('');
-    setConvertMacPath('');
+    setWinPath(initialPath);
+    setMacPath(initialPath);
+    setConvertWinPath(initialPath);
+    setConvertMacPath(initialPath);
   };
 
   return (
