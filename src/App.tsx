@@ -1,5 +1,8 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
+import { usePathConversion } from './hooks/usePathConversion';
+import { useCopyClipboard } from './hooks/useCopyClipboard';
+
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import TextField from '@mui/material/TextField';
@@ -12,136 +15,75 @@ import InputAdornment from '@mui/material/InputAdornment';
 import CheckIcon from '@mui/icons-material/Check';
 
 export const App = () => {
-  //パスの設定
-  const [winPath, setWinPath] = useState<string>('');
-  const [macPath, setMacPath] = useState<string>('');
+  //TextFieldの初期値
+  const initialPath: string = '';
 
-  //変換後のパスを保存
-  const [convertWinPath, setConvertWinPath] = useState<string>('');
-  const [convertMacPath, setConvertMacPath] = useState<string>('');
+  //usePathConversion呼び出し
+  const {
+    winPath,
+    macPath,
+    setWinPath,
+    setMacPath,
+    convertedWinPath,
+    setConvertedWinPath,
+    convertedMacPath,
+    setConvertedMacPath,
+    resultWinText,
+    resultMacText,
+  } = usePathConversion({ initialPath });
 
-  //text ariaに値が入力された際はtrueとするフラグ
-  const [checkConvertWinPath, setCheckConvertWinPath] = useState<boolean>(false);
-  const [checkConvertMacPath, setCheckConvertMacPath] = useState<boolean>(false);
+  //useCopyClipboard呼び出し
+  const { checkCopyWinFlag, checkCopyMacFlag, copyToClipboard } = useCopyClipboard();
 
-  //コピーペースト機能で使用(Windows)
-  const [resultWinText, setResultWinText] = useState<string>('');
-
-  //コピーペースト機能で使用(Mac)
-  const [resultMacText, setResultMacText] = useState<string>('');
-
-  //コピーボタンを押下した際にチェックアイコンを表示する
-  const [checkCopyWinFlag, setCheckCopyWinFlag] = useState<boolean>(false);
-  const [checkCopyMacFlag, setCheckCopyMacFlag] = useState<boolean>(false);
+  //TextFieldに値が入力された際に、変換されたパスを表示するために使用
+  const [checkConvertedWinPath, setCheckConvertedWinPath] = useState<boolean>(false);
+  const [checkConvertedMacPath, setCheckConvertedMacPath] = useState<boolean>(false);
 
   // inputフォーム入力
   const setPathInput = (inputPath: string, isWindowsPath: boolean) => {
+    //windowsのpathを変換
     if (isWindowsPath) {
       setWinPath(inputPath);
       if (inputPath) {
-        setCheckConvertWinPath(true);
+        setCheckConvertedWinPath(true);
       }
-
       // text ariaが空の場合はmacのパスも空とする
       if (!inputPath) {
-        setMacPath('');
+        setMacPath(initialPath);
       }
+      //macのpathを変換
     } else {
       setMacPath(inputPath);
       if (inputPath) {
-        setCheckConvertMacPath(true);
+        setCheckConvertedMacPath(true);
       }
-
       // text ariaが空の場合はwindowsのパスも空とする
       if (!inputPath) {
-        setWinPath('');
+        setWinPath(initialPath);
       }
     }
   };
 
-  //変換ボタン押下時に、Pathの変換処理を実行する
-  const convertWindowsPathToMac = useCallback(() => {
-    //windowsのpathを変換
-    if (winPath) {
-      let macPaths = winPath.replace(/\\/g, '/').replace(/192.168.254.6/g, 'Volumes');
-      //windows側のtextに入力された文字が2文字以上だった場合、パスの変換前に不要なスラッシュを削除する
-      if (winPath.length !== 1) {
-        //winPathの先頭の文字がスラッシュだった場合、スラッシュを削除する
-        if (winPath[0] === '\\') {
-          macPaths = macPaths.slice(1); //先頭の文字を削除
-        }
-      }
-      setConvertMacPath(macPaths);
-      setResultMacText(macPaths);
-    } else {
-      setConvertMacPath('');
-      setResultMacText('');
-    }
-  }, [winPath]);
-
-  const convertMacPathToWindows = useCallback(() => {
-    //windowsのpathを変換
-    if (macPath) {
-      //パスの変換前に不要なバックスラッシュを削除する
-      const replaceBackSlash = macPath.replace(/\\/g, '');
-      //macのpathを変換
-      const normalizWinPath = `\\${replaceBackSlash.replace(/\//g, '\\').replace(/Volumes/g, '192.168.254.6')}`;
-      //文字コードをUTF8-mac(NFD)からUTF8(NFC)に変換する
-      const winPaths = normalizWinPath.normalize('NFC');
-      setConvertWinPath(winPaths);
-      setResultWinText(winPaths);
-    } else {
-      setConvertWinPath('');
-      setResultWinText('');
-    }
-  }, [macPath]);
-
-  // pathが更新された時にconversionWinPathを呼び出し、パスの変換を行う
+  // convertedWinPath or convertedMacPathが更新された時にフラグをクリアする
   useEffect(() => {
-    convertWindowsPathToMac();
-  }, [winPath, convertWindowsPathToMac]);
-
-  // pathが更新された時にconversionMacPathを呼び出し、パスの変換を行う
-  useEffect(() => {
-    convertMacPathToWindows();
-  }, [macPath, convertMacPathToWindows]);
-
-  // convertWinPath or convertMacPathが更新された時にフラグをクリアする
-  useEffect(() => {
-    if (convertWinPath) {
-      setCheckConvertWinPath(false);
+    if (convertedWinPath) {
+      setCheckConvertedWinPath(false);
     }
-  }, [convertWinPath]);
+  }, [convertedWinPath]);
 
   useEffect(() => {
-    if (convertMacPath) {
-      setCheckConvertMacPath(false);
+    if (convertedMacPath) {
+      setCheckConvertedMacPath(false);
     }
-  }, [convertMacPath]);
+  }, [convertedMacPath]);
 
   //クリアボタン押下時に、テキストエリアと変換された値をクリアする
   const clearPath = () => {
     //パスの初期化
-    setWinPath('');
-    setMacPath('');
-    setConvertWinPath('');
-    setConvertMacPath('');
-  };
-
-  //クリップボードにコピー関数
-  const copyToClipboard = async (alteredText: string, osCheck: boolean) => {
-    await global.navigator.clipboard.writeText(alteredText);
-    if (osCheck) {
-      setCheckCopyWinFlag(true);
-      setTimeout(() => {
-        setCheckCopyWinFlag(false);
-      }, 1000);
-    } else {
-      setCheckCopyMacFlag(true);
-      setTimeout(() => {
-        setCheckCopyMacFlag(false);
-      }, 1000);
-    }
+    setWinPath(initialPath);
+    setMacPath(initialPath);
+    setConvertedWinPath(initialPath);
+    setConvertedMacPath(initialPath);
   };
 
   return (
@@ -171,7 +113,7 @@ export const App = () => {
             label="Windows Path"
             multiline
             rows={8}
-            value={checkConvertWinPath ? winPath : convertWinPath}
+            value={checkConvertedWinPath ? winPath : convertedWinPath}
             onChange={(event) => {
               setPathInput(event.target.value, true);
             }}
@@ -193,7 +135,7 @@ export const App = () => {
             label="Mac Path"
             multiline
             rows={8}
-            value={checkConvertMacPath ? macPath : convertMacPath}
+            value={checkConvertedMacPath ? macPath : convertedMacPath}
             onChange={(event) => {
               setPathInput(event.target.value, false);
             }}
