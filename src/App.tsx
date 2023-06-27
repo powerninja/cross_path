@@ -1,5 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
+import { usePathConversion } from './hooks/usePathConversion';
+
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import TextField from '@mui/material/TextField';
@@ -12,23 +14,25 @@ import InputAdornment from '@mui/material/InputAdornment';
 import CheckIcon from '@mui/icons-material/Check';
 
 export const App = () => {
-  //パスの設定
-  const [winPath, setWinPath] = useState<string>('');
-  const [macPath, setMacPath] = useState<string>('');
-
-  //変換後のパスを保存
-  const [convertWinPath, setConvertWinPath] = useState<string>('');
-  const [convertMacPath, setConvertMacPath] = useState<string>('');
+  //usePathConversion呼び出し
+  const {
+    winPath,
+    macPath,
+    setWinPath,
+    setMacPath,
+    convertWinPath,
+    setConvertWinPath,
+    convertMacPath,
+    setConvertMacPath,
+    resultWinText,
+    resultMacText,
+    convertWindowsPathToMac,
+    convertMacPathToWindows,
+  } = usePathConversion();
 
   //text ariaに値が入力された際はtrueとするフラグ
   const [checkConvertWinPath, setCheckConvertWinPath] = useState<boolean>(false);
   const [checkConvertMacPath, setCheckConvertMacPath] = useState<boolean>(false);
-
-  //コピーペースト機能で使用(Windows)
-  const [resultWinText, setResultWinText] = useState<string>('');
-
-  //コピーペースト機能で使用(Mac)
-  const [resultMacText, setResultMacText] = useState<string>('');
 
   //コピーボタンを押下した際にチェックアイコンを表示する
   const [checkCopyWinFlag, setCheckCopyWinFlag] = useState<boolean>(false);
@@ -58,43 +62,6 @@ export const App = () => {
       }
     }
   };
-
-  //変換ボタン押下時に、Pathの変換処理を実行する
-  const convertWindowsPathToMac = useCallback(() => {
-    //windowsのpathを変換
-    if (winPath) {
-      let macPaths = winPath.replace(/\\/g, '/').replace(/192.168.254.6/g, 'Volumes');
-      //windows側のtextに入力された文字が2文字以上だった場合、パスの変換前に不要なスラッシュを削除する
-      if (winPath.length !== 1) {
-        //winPathの先頭の文字がスラッシュだった場合、スラッシュを削除する
-        if (winPath[0] === '\\') {
-          macPaths = macPaths.slice(1); //先頭の文字を削除
-        }
-      }
-      setConvertMacPath(macPaths);
-      setResultMacText(macPaths);
-    } else {
-      setConvertMacPath('');
-      setResultMacText('');
-    }
-  }, [winPath]);
-
-  const convertMacPathToWindows = useCallback(() => {
-    //windowsのpathを変換
-    if (macPath) {
-      //パスの変換前に不要なバックスラッシュを削除する
-      const replaceBackSlash = macPath.replace(/\\/g, '');
-      //macのpathを変換
-      const normalizWinPath = `\\${replaceBackSlash.replace(/\//g, '\\').replace(/Volumes/g, '192.168.254.6')}`;
-      //文字コードをUTF8-mac(NFD)からUTF8(NFC)に変換する
-      const winPaths = normalizWinPath.normalize('NFC');
-      setConvertWinPath(winPaths);
-      setResultWinText(winPaths);
-    } else {
-      setConvertWinPath('');
-      setResultWinText('');
-    }
-  }, [macPath]);
 
   // pathが更新された時にconversionWinPathを呼び出し、パスの変換を行う
   useEffect(() => {
