@@ -16,6 +16,9 @@ import CheckIcon from '@mui/icons-material/Check';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import LaptopMacIcon from '@mui/icons-material/LaptopMac';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import Stack from '@mui/material/Stack';
 
 export const App = () => {
   //TextFieldの初期値
@@ -91,6 +94,19 @@ export const App = () => {
 
   return (
     <>
+      {checkCopyWinFlag || checkCopyMacFlag ? (
+        <Stack
+          sx={{ width: '50%', position: 'fixed', top: '10%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 'tooltip' }}
+          spacing={2}
+          position="fixed"
+        >
+          <Alert severity="success" variant="filled">
+            コピーが成功しました！
+          </Alert>
+        </Stack>
+      ) : (
+        <></>
+      )}
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="sticky" color="transparent">
           <Toolbar>
