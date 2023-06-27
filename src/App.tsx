@@ -9,6 +9,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import InputAdornment from '@mui/material/InputAdornment';
+import CheckIcon from '@mui/icons-material/Check';
 
 export const App = () => {
   //パスの設定
@@ -28,6 +29,10 @@ export const App = () => {
 
   //コピーペースト機能で使用(Mac)
   const [resultMacText, setResultMacText] = useState<string>('');
+
+  //コピーボタンを押下した際にチェックアイコンを表示する
+  const [checkCopyWinFlag, setCheckCopyWinFlag] = useState<boolean>(false);
+  const [checkCopyMacFlag, setCheckCopyMacFlag] = useState<boolean>(false);
 
   // inputフォーム入力
   const setPathInput = (inputPath: string, isWindowsPath: boolean) => {
@@ -124,8 +129,19 @@ export const App = () => {
   };
 
   //クリップボードにコピー関数
-  const copyToClipboard = async (alteredText: string) => {
+  const copyToClipboard = async (alteredText: string, osCheck: boolean) => {
     await global.navigator.clipboard.writeText(alteredText);
+    if (osCheck) {
+      setCheckCopyWinFlag(true);
+      setTimeout(() => {
+        setCheckCopyWinFlag(false);
+      }, 1000);
+    } else {
+      setCheckCopyMacFlag(true);
+      setTimeout(() => {
+        setCheckCopyMacFlag(false);
+      }, 1000);
+    }
   };
 
   return (
@@ -163,8 +179,8 @@ export const App = () => {
               endAdornment: (
                 <InputAdornment position="end">
                   <Tooltip title="Copy to Clipboard" placement="top" arrow>
-                    <IconButton color="primary" size="small" onClick={() => copyToClipboard(resultWinText)}>
-                      <ContentCopyIcon fontSize="small" />
+                    <IconButton color="primary" size="small" onClick={() => copyToClipboard(resultWinText, true)}>
+                      {checkCopyWinFlag ? <CheckIcon></CheckIcon> : <ContentCopyIcon fontSize="small" />}
                     </IconButton>
                   </Tooltip>
                 </InputAdornment>
@@ -185,8 +201,8 @@ export const App = () => {
               endAdornment: (
                 <InputAdornment position="end">
                   <Tooltip title="Copy to Clipboard" placement="top" arrow>
-                    <IconButton color="primary" size="small" onClick={() => copyToClipboard(resultMacText)}>
-                      <ContentCopyIcon fontSize="small" />
+                    <IconButton color="primary" size="small" onClick={() => copyToClipboard(resultMacText, false)}>
+                      {checkCopyMacFlag ? <CheckIcon></CheckIcon> : <ContentCopyIcon fontSize="small" />}
                     </IconButton>
                   </Tooltip>
                 </InputAdornment>
