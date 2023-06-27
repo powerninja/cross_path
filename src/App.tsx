@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import './App.css';
 import { usePathConversion } from './hooks/usePathConversion';
+import { useCopyClipboard } from './hooks/useCopyClipboard';
 
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -30,32 +31,31 @@ export const App = () => {
     convertMacPathToWindows,
   } = usePathConversion();
 
+  //useCopyClipboard呼び出し
+  const { checkCopyWinFlag, checkCopyMacFlag, copyToClipboard } = useCopyClipboard();
+
   //text ariaに値が入力された際はtrueとするフラグ
   const [checkConvertWinPath, setCheckConvertWinPath] = useState<boolean>(false);
   const [checkConvertMacPath, setCheckConvertMacPath] = useState<boolean>(false);
 
-  //コピーボタンを押下した際にチェックアイコンを表示する
-  const [checkCopyWinFlag, setCheckCopyWinFlag] = useState<boolean>(false);
-  const [checkCopyMacFlag, setCheckCopyMacFlag] = useState<boolean>(false);
-
   // inputフォーム入力
   const setPathInput = (inputPath: string, isWindowsPath: boolean) => {
+    //windowsのpathを変換
     if (isWindowsPath) {
       setWinPath(inputPath);
       if (inputPath) {
         setCheckConvertWinPath(true);
       }
-
       // text ariaが空の場合はmacのパスも空とする
       if (!inputPath) {
         setMacPath('');
       }
+      //macのpathを変換
     } else {
       setMacPath(inputPath);
       if (inputPath) {
         setCheckConvertMacPath(true);
       }
-
       // text ariaが空の場合はwindowsのパスも空とする
       if (!inputPath) {
         setWinPath('');
@@ -93,22 +93,6 @@ export const App = () => {
     setMacPath('');
     setConvertWinPath('');
     setConvertMacPath('');
-  };
-
-  //クリップボードにコピー関数
-  const copyToClipboard = async (alteredText: string, osCheck: boolean) => {
-    await global.navigator.clipboard.writeText(alteredText);
-    if (osCheck) {
-      setCheckCopyWinFlag(true);
-      setTimeout(() => {
-        setCheckCopyWinFlag(false);
-      }, 1000);
-    } else {
-      setCheckCopyMacFlag(true);
-      setTimeout(() => {
-        setCheckCopyMacFlag(false);
-      }, 1000);
-    }
   };
 
   return (
