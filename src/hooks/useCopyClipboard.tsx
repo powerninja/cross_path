@@ -11,12 +11,12 @@ export const useCopyClipboard = () => {
       setCheckCopyWinFlag(true);
       setTimeout(() => {
         setCheckCopyWinFlag(false);
-      }, 1000);
+      }, 2000);
     } else {
       setCheckCopyMacFlag(true);
       setTimeout(() => {
         setCheckCopyMacFlag(false);
-      }, 1000);
+      }, 2000);
     }
   };
 
