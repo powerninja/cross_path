@@ -115,75 +115,77 @@ export const App = () => {
           </Toolbar>
         </AppBar>
       </Box>
-      <div
-        style={{
-          height: 'auto',
-          margin: '0 auto',
-          maxWidth: 1000,
-          width: '100%',
-        }}
-      >
-        <div className="d-flex flex-row justify-content-around">
-          <Box
-            component="form"
-            sx={{
-              '& .MuiTextField-root': { m: 1, width: '40ch' },
-            }}
-            noValidate
-            autoComplete="off"
-          >
-            <TextField
-              id="outlined-multiline-static"
-              label="Windows Path"
-              multiline
-              rows={8}
-              value={checkConvertedWinPath ? winPath : convertedWinPath}
-              onChange={(event) => {
-                setPathInput(event.target.value, true);
+      <Box sx={{ mt: 4 }}>
+        <div
+          style={{
+            height: 'auto',
+            margin: '0 auto',
+            maxWidth: 1000,
+            width: '100%',
+          }}
+        >
+          <div className="d-flex flex-row justify-content-around">
+            <Box
+              component="form"
+              sx={{
+                '& .MuiTextField-root': { m: 1, width: '40ch' },
               }}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <Tooltip title="Copy to Clipboard" placement="top" arrow>
-                      <IconButton color="primary" size="small" onClick={() => copyToClipboard(resultWinText, true)}>
-                        {checkCopyWinFlag ? <CheckIcon></CheckIcon> : <ContentCopyIcon fontSize="small" />}
-                      </IconButton>
-                    </Tooltip>
-                  </InputAdornment>
-                ),
-              }}
-            />
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                id="outlined-multiline-static"
+                label="Windows Path"
+                multiline
+                rows={8}
+                value={checkConvertedWinPath ? winPath : convertedWinPath}
+                onChange={(event) => {
+                  setPathInput(event.target.value, true);
+                }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <Tooltip title="Copy to Clipboard" placement="top" arrow>
+                        <IconButton color="primary" size="small" onClick={() => copyToClipboard(resultWinText, true)}>
+                          {checkCopyWinFlag ? <CheckIcon></CheckIcon> : <ContentCopyIcon fontSize="small" />}
+                        </IconButton>
+                      </Tooltip>
+                    </InputAdornment>
+                  ),
+                }}
+              />
 
-            <TextField
-              id="outlined-multiline-static"
-              label="Mac Path"
-              multiline
-              rows={8}
-              value={checkConvertedMacPath ? macPath : convertedMacPath}
-              onChange={(event) => {
-                setPathInput(event.target.value, false);
-              }}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <Tooltip title="Copy to Clipboard" placement="top" arrow>
-                      <IconButton color="primary" size="small" onClick={() => copyToClipboard(resultMacText, false)}>
-                        {checkCopyMacFlag ? <CheckIcon></CheckIcon> : <ContentCopyIcon fontSize="small" />}
-                      </IconButton>
-                    </Tooltip>
-                  </InputAdornment>
-                ),
-              }}
-            />
+              <TextField
+                id="outlined-multiline-static"
+                label="Mac Path"
+                multiline
+                rows={8}
+                value={checkConvertedMacPath ? macPath : convertedMacPath}
+                onChange={(event) => {
+                  setPathInput(event.target.value, false);
+                }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <Tooltip title="Copy to Clipboard" placement="top" arrow>
+                        <IconButton color="primary" size="small" onClick={() => copyToClipboard(resultMacText, false)}>
+                          {checkCopyMacFlag ? <CheckIcon></CheckIcon> : <ContentCopyIcon fontSize="small" />}
+                        </IconButton>
+                      </Tooltip>
+                    </InputAdornment>
+                  ),
+                }}
+              />
 
-            <div className="button-container">
-              <Button variant="outlined" startIcon={<DeleteIcon />} onClick={() => clearPath()}>
-                クリア
-              </Button>
-            </div>
-          </Box>
+              <div className="button-container">
+                <Button variant="outlined" startIcon={<DeleteIcon />} onClick={() => clearPath()}>
+                  クリア
+                </Button>
+              </div>
+            </Box>
+          </div>
         </div>
-      </div>
+      </Box>
     </>
   );
 };
