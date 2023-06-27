@@ -29,29 +29,28 @@ export const App = () => {
   //コピーペースト機能で使用(Mac)
   const [resultMacText, setResultMacText] = useState<string>('');
 
-  // windows inputフォーム入力
-  const setWinPathInput = (inputPath: string) => {
-    setWinPath(inputPath);
-    if (inputPath) {
-      setCheckConvertWinPath(true);
-    }
+  // inputフォーム入力
+  const setPathInput = (inputPath: string, isWindowsPath: boolean) => {
+    if (isWindowsPath) {
+      setWinPath(inputPath);
+      if (inputPath) {
+        setCheckConvertWinPath(true);
+      }
 
-    // text ariaが空の場合はmacのパスも空とする
-    if (!inputPath) {
-      setMacPath('');
-    }
-  };
+      // text ariaが空の場合はmacのパスも空とする
+      if (!inputPath) {
+        setMacPath('');
+      }
+    } else {
+      setMacPath(inputPath);
+      if (inputPath) {
+        setCheckConvertMacPath(true);
+      }
 
-  // mac inputフォーム入力
-  const setMacPathInput = (inputPath: string) => {
-    setMacPath(inputPath);
-    if (inputPath) {
-      setCheckConvertMacPath(true);
-    }
-
-    // text ariaが空の場合はwindowsのパスも空とする
-    if (!inputPath) {
-      setWinPath('');
+      // text ariaが空の場合はwindowsのパスも空とする
+      if (!inputPath) {
+        setWinPath('');
+      }
     }
   };
 
@@ -158,7 +157,7 @@ export const App = () => {
             rows={8}
             value={checkConvertWinPath ? winPath : convertWinPath}
             onChange={(event) => {
-              setWinPathInput(event.target.value);
+              setPathInput(event.target.value, true);
             }}
             InputProps={{
               endAdornment: (
@@ -180,7 +179,7 @@ export const App = () => {
             rows={8}
             value={checkConvertMacPath ? macPath : convertMacPath}
             onChange={(event) => {
-              setMacPathInput(event.target.value);
+              setPathInput(event.target.value, false);
             }}
             InputProps={{
               endAdornment: (
