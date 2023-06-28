@@ -18,6 +18,7 @@ import Toolbar from '@mui/material/Toolbar';
 import LaptopMacIcon from '@mui/icons-material/LaptopMac';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
+import GitHubIcon from '@mui/icons-material/GitHub';
 
 export const App = () => {
   //TextFieldの初期値
@@ -95,7 +96,7 @@ export const App = () => {
     <>
       {checkCopyWinFlag || checkCopyMacFlag ? (
         <Stack
-          sx={{ width: '50%', position: 'fixed', top: '10%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 'tooltip' }}
+          sx={{ width: '50%', position: 'fixed', top: '5%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 'tooltip' }}
           spacing={2}
           position="fixed"
         >
@@ -127,6 +128,12 @@ export const App = () => {
             >
               ファイルパス変換
             </Typography>
+            <Box sx={{ flexGrow: 1 }} />
+            <Tooltip title="Open GitHub">
+              <IconButton sx={{ p: 0 }} href="https://github.com/powerninja/cross_path">
+                <GitHubIcon />
+              </IconButton>
+            </Tooltip>
           </Toolbar>
         </AppBar>
       </Box>
